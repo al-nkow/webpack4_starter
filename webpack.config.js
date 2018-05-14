@@ -2,16 +2,14 @@ const path = require('path');
 
 // TODO: use https://github.com/webpack-contrib/mini-css-extract-plugin instead
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-// const HtmlWebpackPlugin = require('html-webpack-plugin')
-
-
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const conf = {
   entry: './src/js/index.js',
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: 'main.js',
-    publicPath: 'dist/'
+    // publicPath: 'dist/'
   },
   devServer: {
     overlay: true
@@ -22,11 +20,19 @@ const conf = {
         test: /\.js$/,
         loader: 'babel-loader',
         // exclude: '/node_modules/'
-      }, {
+      },
+      // {
+      //   test: /\.pug$/,
+      //   loader: 'pug-loader',
+      //   options: {
+      //     pretty: true
+      //   }
+      // },
+      {
         test: /\.css$/,
         // use: ['style-loader', 'css-loader'],
         use: ExtractTextPlugin.extract({
-          // fallback: 'style-loader', // отменить
+          // fallback: 'style-loader',
           use: 'css-loader'
         })
       }, {
@@ -37,14 +43,43 @@ const conf = {
             'sass-loader'
           ]
         })
-      }
+      }, {
+        test: /\.html$/,
+        use: ['html-loader']
+      }, {
+        test: /\.(jpg|png)$/,
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]',
+            outputPath: 'img/',
+            publicPath: 'img/'
+          }
+        }]
+      },
+      // multiple html files: (need import in index.js - import '../users.html';)
+      // {
+      //   test: /\.html$/,
+      //   use: [{
+      //     loader: 'file-loader',
+      //     options: {
+      //       name: '[name].[ext]'
+      //     }
+      //   }],
+      //   exclude: path.resolve(__dirname, 'src/index.html')
+      // }
     ]
   },
   plugins: [
-    // new HtmlWebpackPlugin({
-    //   template: './src/index.template.ejs',
-    //   inject: 'body',
-    // }),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: './src/index.html'
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'users.html',
+      template: './src/users.html',
+      // chunks: []
+    }),
     new ExtractTextPlugin('styles.css')
   ]
 };
