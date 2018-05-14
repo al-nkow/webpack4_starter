@@ -21,13 +21,14 @@ const conf = {
         loader: 'babel-loader',
         // exclude: '/node_modules/'
       },
-      // {
-      //   test: /\.pug$/,
-      //   loader: 'pug-loader',
-      //   options: {
-      //     pretty: true
-      //   }
-      // },
+      {
+        test: /\.pug$/,
+        use: 'pug-loader'
+        // loader: 'pug-loader',
+        // options: {
+        //   pretty: true
+        // }
+      },
       {
         test: /\.css$/,
         // use: ['style-loader', 'css-loader'],
@@ -46,8 +47,10 @@ const conf = {
       }, {
         test: /\.html$/,
         use: ['html-loader']
-      }, {
-        test: /\.(jpg|png)$/,
+      },
+      {
+        // test: /\.(jpg|png)$/,
+        test: /\.(gif|png|jpe?g|svg)$/i,
         use: [{
           loader: 'file-loader',
           options: {
@@ -57,6 +60,7 @@ const conf = {
           }
         }]
       },
+      // =====
       // multiple html files: (need import in index.js - import '../users.html';)
       // {
       //   test: /\.html$/,
@@ -79,6 +83,10 @@ const conf = {
       filename: 'users.html',
       template: './src/users.html',
       // chunks: []
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'info.html',
+      template: './src/info.pug'
     }),
     new ExtractTextPlugin('styles.css')
   ]
