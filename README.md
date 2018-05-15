@@ -1,10 +1,9 @@
+## Webpack 4 starter
+
+For start development of new landing site
+
 ````
-npm i babel-core babel-loader babel-preset-env babel-preset-stage-3 --save-dev
-npm i style-loader css-loader --save-dev
-npm i extract-text-webpack-plugin@next --save-dev
-npm i bootstrap --save
-npm i sass-loader node-sass --save-dev
-npm i html-loader file-loader --save-dev
-npm i pug-loader --save-dev
-npm i image-webpack-loader --save-dev
+npm i
+npm start
+npm run build
 ````

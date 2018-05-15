@@ -1,15 +1,13 @@
 const path = require('path');
-
-// TODO: use https://github.com/webpack-contrib/mini-css-extract-plugin instead
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const autoprefixer = require('autoprefixer');
 
 const conf = {
   entry: './src/js/index.js',
   output: {
     path: path.resolve(__dirname, './dist'),
-    filename: 'main.js',
-    // publicPath: 'dist/'
+    filename: 'main.js'
   },
   devServer: {
     overlay: true
@@ -19,28 +17,37 @@ const conf = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        // exclude: '/node_modules/'
       },
       {
         test: /\.pug$/,
         use: 'pug-loader'
-        // loader: 'pug-loader',
-        // options: {
-        //   pretty: true
-        // }
       },
       {
         test: /\.css$/,
-        // use: ['style-loader', 'css-loader'],
         use: ExtractTextPlugin.extract({
-          // fallback: 'style-loader',
           use: 'css-loader'
         })
       }, {
         test: /\.scss$/,
         use: ExtractTextPlugin.extract({
           use: [
-            'css-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                minimize: true
+              }
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: [
+                  autoprefixer({
+                    browsers:['ie >= 8', 'last 4 version']
+                  })
+                ],
+                // sourceMap: true
+              }
+            },
             'sass-loader'
           ]
         })
@@ -49,7 +56,6 @@ const conf = {
         use: ['html-loader']
       },
       {
-        // test: /\.(jpg|png)$/,
         test: /\.(gif|png|jpe?g|svg)$/i,
         use: [{
           loader: 'file-loader',
@@ -59,19 +65,7 @@ const conf = {
             publicPath: 'img/'
           }
         }]
-      },
-      // =====
-      // multiple html files: (need import in index.js - import '../users.html';)
-      // {
-      //   test: /\.html$/,
-      //   use: [{
-      //     loader: 'file-loader',
-      //     options: {
-      //       name: '[name].[ext]'
-      //     }
-      //   }],
-      //   exclude: path.resolve(__dirname, 'src/index.html')
-      // }
+      }
     ]
   },
   plugins: [
@@ -82,7 +76,6 @@ const conf = {
     new HtmlWebpackPlugin({
       filename: 'users.html',
       template: './src/users.html',
-      // chunks: []
     }),
     new HtmlWebpackPlugin({
       filename: 'info.html',
@@ -94,7 +87,7 @@ const conf = {
 
 module.exports = (env, options) => {
   if (options.mode !== 'production') {
-    conf.devtool = 'eval-sourcemap'; // create sourcemap for production mode
+    conf.devtool = 'eval-sourcemap';
   }
   return conf;
 }
