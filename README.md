@@ -1,6 +1,6 @@
 ## Webpack 4 starter
 
-For start development of new landing site
+To start development of new landing site
 
 ````
 npm i
